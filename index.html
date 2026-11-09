@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scratch Program Loader</title>
+  <meta name="description" content="An open source Scratch emulator that can run older versions of Scratch using Smalltalk and SqueakJS. Requires JavaScript enabled; may cause conflicts with the page.">
+  <!-- Load Roboto Light and Roboto Regular -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 300; /* Light for normal text */
+      background: url('https://i.ytimg.com/vi/dfVmJFb8MF8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLASSKMyR8lNwCd9yOua6oA6FhOVrg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 20px 0;
+    }
+
+    .iframe-container {
+      position: relative;
+      width: 1000px;
+      height: 800px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    h1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      margin: 0;
+      padding: 10px 0;
+      text-align: center;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      font-size: 24px;
+      font-weight: 300; /* Light */
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      z-index: 2;
+    }
+
+    .description {
+      width: 1000px;
+      margin: 10px 0 10px 0;
+      background: rgba(0,0,0,0.5);
+      padding: 15px;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 300; /* Light */
+      line-height: 1.5;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    }
+
+    .warning {
+      width: 1000px;
+      margin: 10px 0 20px 0;
+      background: red;
+      padding: 15px;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.5;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    }
+
+.unsupported {
+      width: 1000px;
+      margin: 10px 0 20px 0;
+      background: yellow;
+      padding: 15px;
+      color: #000;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.5;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    }
+    
+    strong {
+      font-weight: 400; /* Regular for strong text */
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .controls button {
+      padding: 12px 25px;
+      font-size: 16px;
+      font-weight: 300; /* Light */
+      cursor: pointer;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      font-family: 'Roboto', sans-serif;
+      transition: 0.2s;
+    }
+
+    .controls button:hover {
+      background: rgba(255,255,255,0.1);
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+<div class="iframe-container">
+  <h1>Scratch Program Loader</h1>
+  <iframe src="https://scratcharchive.naleksuh.com" allowfullscreen></iframe>
+</div>
+
+<div class="description">
+  An open source Scratch emulator that can run older versions of Scratch using Smalltalk and SqueakJS. 
+  This project needs JavaScript enabled; or else the page will conflict to the browser like Chrome. <strong>Scratch 2.0 cannot run inside this page</strong> due to the end-of-life of Adobe Flash Player (No, not actual Flash, I said Flash for Web Browsers.). 
+  Use the "Run Scratch 2.0" button to open it in a new tab. You can try and use these emulations in this iframe if it has a bug that prevents them from opening in a new tab, though it's older: Scratch 1.4 Beta, Scratch 1.4 Release Candidate, Scratch 1.4, Scratch 1.4.0.1, and Scratch 1.4.0.7. 
+  The last version to support the emulator was Scratch 1.4.0.7, because of Smalltalk issues with Scratch 2.0 (which cannot run unless you use Ruffle), but however I ported the 2.0 version! Use the button below to use Scratch 2.0. I droppped support to Internet Explorer because their JavaScript do not support const.
+</div>
+
+<div class="warning">
+  This content is exclusively on Chrome, Safari, Firefox, Edge, and more. However this was not supported in older versions because the website supports JS.
+</div>
+
+<div class="unsupported">
+  Unsupported versions: <strong> Internet Explorer (IE) versions</strong>, Safari 5-9, Opera 12, Opera Mini, Android Browser 4.3 and some older versions of Android WebView.
+</div>
+
+<div class="controls">
+  <button id="fullscreenBtn">Fullscreen</button>
+  <button id="refreshBtn">Refresh</button>
+  <button id="runBtn">Run Scratch 2.0</button>
+  <button id="openBtn">Open IFrame in New Tab</button>
+  <button id="websiteNameBtn">Website Link Name</button>
+</div>
+
+<script>
+  const iframe = document.querySelector('.iframe-container iframe');
+  const fullscreenBtn = document.getElementById('fullscreenBtn');
+  const refreshBtn = document.getElementById('refreshBtn');
+  const runBtn = document.getElementById('runBtn');
+  const openBtn = document.getElementById('openBtn');
+  const websiteNameBtn = document.getElementById('websiteNameBtn');
+
+  const scratch14URL = "https://userarham.github.io/Eaglerscratch-2.0/";
+  const websiteName = "https://scratcharchive.naleksuh.com/";
+
+  // Fullscreen toggle
+  fullscreenBtn.addEventListener('click', () => {
+    const container = document.querySelector('.iframe-container');
+    if (container.requestFullscreen) container.requestFullscreen();
+    else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
+    else if (container.msRequestFullscreen) container.msRequestFullscreen();
+  });
+
+  // Refresh iframe
+  refreshBtn.addEventListener('click', () => {
+    const src = iframe.src;
+    iframe.src = '';
+    setTimeout(() => { iframe.src = src; }, 50);
+  });
+
+  // Run Scratch 1.4 in a new tab
+  runBtn.addEventListener('click', () => {
+    window.open(scratch14URL, '_blank');
+  });
+
+  // Open iframe in a new tab
+  openBtn.addEventListener('click', () => {
+    window.open(iframe.src, '_blank');
+  });
+
+  // Show website name alert only
+  websiteNameBtn.addEventListener('click', () => {
+    alert("Website name: " + websiteName);
+  });
+</script>
+
+</body>
+</html>
